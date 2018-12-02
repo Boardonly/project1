@@ -2,20 +2,22 @@
     "name": "memory-game",
     "version": "0.1.0",
     "description": "This is an example of a Memory-game on react.",
-    "dependencies": {
+    "dependencies":{
         "react": "^16.6.3",
         "react-dom": "^16.6.3"
     },
-    "devDependencies": {
-        "gh-pages": "^2.0.1",
+    "devDependencies":{
         "parcel": "1.10.3"
+
     },
-    "scripts": {
+    "scripts":{
         "start": "parcel ./src/index.html",
-        "build": "parcel build ./src/index.html --public-url /project1"
+        "build": "parcel build ./src/index.html --public-url /project1",
+        "deploy": "gh-pages -d dist"
     },
     "contributors": [
         "Yorik"
     ],
+    
     "license": "MIT"
 }
