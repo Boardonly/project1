@@ -43,9 +43,9 @@ createCards() {
     card.name = `${newSuits}`;
     memory.prepend(card);
     img_back.className = 'back';
-    img_back.src = `https://raw.githubusercontent.com/Boardonly/project1/master/images/${newSuits}.jpg`;
+    img_back.src = `https://raw.githubusercontent.com/Boardonly/images/master/images/${newSuits}.jpg`;
     img_front.className = 'front';
-    img_front.src = `https://raw.githubusercontent.com/Boardonly/project1/master/images/back.jpg`;
+    img_front.src = `https://raw.githubusercontent.com/Boardonly/images/master/images/back.jpg`;
     card.prepend(img_back, img_front);
   })
 }
