@@ -50,22 +50,22 @@ createCards() {
   })
 }
 
-flipCard () {
-  if (this.lockBoard) return;
-  if (this === this.firstCard) return;
-  this.classList.add('flip');
-  console.log(this);
+// flipCard () {
+//   if (this.lockBoard) return;
+//   if (this === this.firstCard) return;
+//   this.classList.add('flip');
+//   console.log(this);
   
-  if (this.hasFlippedCard == false) {
-    this.hasFlippedCard = true;
-    this.firstCard = this;
-    console.log(this.firstCard);
-    return;
-  }
-  this.secondCard = this;
-  console.log(this.secondCard, 2);
-  () => matchCard();
-}
+//   if (this.hasFlippedCard == false) {
+//     this.hasFlippedCard = true;
+//     this.firstCard = this;
+//     console.log(this.firstCard);
+//     return;
+//   }
+//   this.secondCard = this;
+//   console.log(this.secondCard, 2);
+//   () => matchCard();
+// }
 
 
 unflipCard() {
