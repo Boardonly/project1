@@ -104,79 +104,168 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"C:/Users/user/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
+})({"MemoryGame.js":[function(require,module,exports) {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var MemoryGame =
+/*#__PURE__*/
+function () {
+  function MemoryGame() {
+    _classCallCheck(this, MemoryGame);
+
+    this.suits = ['0001', '0002', '0003', '0004', '0005', '0006', '0007', '0008', '0001', '0002', '0003', '0004', '0005', '0006', '0007', '0008'];
+    this.newSuits = this.mixSuits(this.suits);
+    this.memory = document.getElementById('memory');
+    this.winText = document.getElementById('winText');
+    this.firstCard = null;
+    this.secondCard = null;
+    this.hasFlippedCard = false;
+    this.lockBoard = false;
+    this.countTries = 0;
+    this.countPairs = 0;
+
+    var _that = this;
+
+    this.flipCard = function () {
+      if (_that.lockBoard) return;
+      if (this === _that.firstCard) return;
+      this.classList.add('flip');
+
+      if (_that.hasFlippedCard == false) {
+        _that.hasFlippedCard = true;
+        _that.firstCard = this;
+        return;
+      }
+
+      _that.secondCard = this;
+
+      _that.matchCard();
+    };
   }
 
-  return bundleURL;
-}
-
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
+  _createClass(MemoryGame, [{
+    key: "mixSuits",
+    value: function mixSuits(suits) {
+      return suits.sort(function () {
+        return .5 - Math.random();
+      });
     }
-  }
+  }, {
+    key: "createCards",
+    value: function createCards() {
+      var _this = this;
 
-  return '/';
-}
+      this.newSuits.map(function (newSuits, i) {
+        var card = document.createElement('div');
+        var img_front = document.createElement('img');
+        var img_back = document.createElement('img');
+        card.className = 'card';
+        card.addEventListener('click', _this.flipCard);
+        card.id = "".concat(i);
+        card.name = "".concat(newSuits);
+        memory.prepend(card);
+        img_back.className = 'back';
+        img_back.src = "https://raw.githubusercontent.com/Boardonly/images/master/images/".concat(newSuits, ".jpg");
+        img_front.className = 'front';
+        img_front.src = "https://raw.githubusercontent.com/Boardonly/images/master/images/back.jpg";
+        card.prepend(img_back, img_front);
+      });
+    } // flipCard () {
+    //   if (this.lockBoard) return;
+    //   if (this === this.firstCard) return;
+    //   this.classList.add('flip');
+    //   console.log(this);
+    //   if (this.hasFlippedCard == false) {
+    //     this.hasFlippedCard = true;
+    //     this.firstCard = this;
+    //     console.log(this.firstCard);
+    //     return;
+    //   }
+    //   this.secondCard = this;
+    //   console.log(this.secondCard, 2);
+    //   () => matchCard();
+    // }
 
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
+  }, {
+    key: "unflipCard",
+    value: function unflipCard() {
+      var _this2 = this;
 
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"C:/Users/user/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
+      this.lockBoard = true;
+      setTimeout(function () {
+        _this2.firstCard.classList.remove('flip');
 
-function updateLink(link) {
-  var newLink = link.cloneNode();
+        _this2.secondCard.classList.remove('flip');
 
-  newLink.onload = function () {
-    link.remove();
-  };
+        _this2.reset();
+      }, 750);
+    }
+  }, {
+    key: "matchCard",
+    value: function matchCard() {
+      this.countTries += 1;
 
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
-  }
-
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
-
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
+      if (this.firstCard.name === this.secondCard.name) {
+        this.disableCards();
+      } else {
+        this.unflipCard();
       }
     }
+  }, {
+    key: "disableCards",
+    value: function disableCards() {
+      this.firstCard.removeEventListener('click', this.flipCard);
+      this.secondCard.removeEventListener('click', this.flipCard);
+      this.countPairs += 1;
+      this.win();
+      this.reset();
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.hasFlippedCard = false;
+      this.lockBoard = false;
+      this.firstCard = null;
+      this.secondCard = null;
+    }
+  }, {
+    key: "win",
+    value: function win() {
+      if (this.countPairs === 8) {
+        this.winText.innerHTML = "\u0423\u0440\u0430. \u042D\u0442\u043E \u041F\u043E\u0431\u0435\u0434\u0430 \u0437\u0430 ".concat(this.countTries, " ").concat(this.ends(), "!!!");
+      }
+    }
+  }, {
+    key: "ends",
+    value: function ends() {
+      var count = this.countTries % 100;
 
-    cssTimeout = null;
-  }, 50);
-}
+      if (count >= 5 && count <= 20) {
+        this.txt = 'ходов';
+      } else {
+        count = count % 10;
 
-module.exports = reloadCSS;
-},{"./bundle-url":"C:/Users/user/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"memory.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
+        if (count == 1) {
+          this.txt = 'ход';
+        } else if (count >= 2 && count <= 4) {
+          this.txt = 'хода';
+        }
+      }
 
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/user/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"C:/Users/user/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+      return this.txt;
+    }
+  }]);
+
+  return MemoryGame;
+}();
+
+var q = new MemoryGame();
+q.createCards();
+},{}],"C:/Users/user/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -345,4 +434,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},["C:/Users/user/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+},{}]},{},["C:/Users/user/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","MemoryGame.js"], null)
+//# sourceMappingURL=/MemoryGame.bb3a8e26.map
