@@ -78,7 +78,6 @@ unflipCard() {
 }
 
 matchCard() {
-  console.log('1');
   this.countTries += 1;
   if (this.firstCard.name === this.secondCard.name) {
     this.disableCards()
